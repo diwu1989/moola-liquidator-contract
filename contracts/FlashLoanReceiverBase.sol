@@ -11,7 +11,7 @@ abstract contract FlashLoanReceiverBase is IFlashLoanReceiver {
   ILendingPoolAddressesProvider internal _addressesProvider;
   ILendingPool internal _lendingPool;
 
-  constructor(ILendingPoolAddressesProvider provider) {
+  constructor(ILendingPoolAddressesProvider provider) public {
     _addressesProvider = provider;
     _lendingPool = ILendingPool(ILendingPoolAddressesProvider(provider).getLendingPool());
   }

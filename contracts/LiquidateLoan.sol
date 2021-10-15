@@ -24,7 +24,7 @@ contract LiquidateLoan is FlashLoanReceiverBase, Ownable {
     event ErrorHandled(string stringFailure);
 
     // intantiate lending pool addresses provider and get lending pool address
-    constructor(ILendingPoolAddressesProvider _addressProvider, IUniswapV2Router02 _ubeswapV2Router) FlashLoanReceiverBase(_addressProvider) {
+    constructor(ILendingPoolAddressesProvider _addressProvider, IUniswapV2Router02 _ubeswapV2Router) FlashLoanReceiverBase(_addressProvider) public {
         provider = _addressProvider;
         lendingPoolAddr = provider.getLendingPool();
 

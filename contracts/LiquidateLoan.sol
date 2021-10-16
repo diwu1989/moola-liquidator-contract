@@ -15,21 +15,17 @@ import { SafeMath } from "./Libraries.sol";
 */
 contract LiquidateLoan is FlashLoanReceiverBase, Ownable {
 
-    ILendingPoolAddressesProvider provider;
-    IUniswapV2Router02 ubeswapV2Router;
+    IUniswapV2Router02 immutable ubeswapV2Router;
     using SafeMath for uint256;
-
-    address lendingPoolAddr;
 
     event ErrorHandled(string stringFailure);
 
     // intantiate lending pool addresses provider and get lending pool address
-    constructor(ILendingPoolAddressesProvider _addressProvider, IUniswapV2Router02 _ubeswapV2Router) FlashLoanReceiverBase(_addressProvider) public {
-        provider = _addressProvider;
-        lendingPoolAddr = provider.getLendingPool();
-
+    constructor(
+        ILendingPoolAddressesProvider _addressProvider, 
+        IUniswapV2Router02 _ubeswapV2Router
+    ) FlashLoanReceiverBase(_addressProvider) public {
         // instantiate ubeswap router to handle exchange
-        // TODO: use Celo contract kit to do fee-less exchange via Mento
         ubeswapV2Router = IUniswapV2Router02(address(_ubeswapV2Router));
     }
 
@@ -71,14 +67,14 @@ contract LiquidateLoan is FlashLoanReceiverBase, Ownable {
         IERC20(loanAsset).transfer(owner(), profit);
 
         // Approve the LendingPool contract to *pull* the owed amount + premiums
-        IERC20(loanAsset).approve(address(_lendingPool), flashLoanRepayment);
+        IERC20(loanAsset).approve(address(LENDING_POOL), flashLoanRepayment);
 
         return true;
     }
 
     function liquidateLoan(address _collateral, address _liquidate_asset, address _userToLiquidate, uint256 _amount, bool _receiveaToken) private {
-        require(IERC20(_liquidate_asset).approve(address(_lendingPool), _amount), "Approval error");
-        _lendingPool.liquidationCall(_collateral,_liquidate_asset, _userToLiquidate, _amount, _receiveaToken);
+        require(IERC20(_liquidate_asset).approve(address(LENDING_POOL), _amount), "Approval error");
+        LENDING_POOL.liquidationCall(_collateral,_liquidate_asset, _userToLiquidate, _amount, _receiveaToken);
     }
 
 
@@ -151,7 +147,7 @@ contract LiquidateLoan is FlashLoanReceiverBase, Ownable {
         bytes memory params = abi.encode(_collateral, _userToLiquidate);
         uint16 referralCode = 0;
 
-        _lendingPool.flashLoan(
+        LENDING_POOL.flashLoan(
             receiverAddress,
             assets,
             amounts,

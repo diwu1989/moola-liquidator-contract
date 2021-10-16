@@ -73,10 +73,9 @@ contract LiquidateLoan is FlashLoanReceiverBase, Ownable {
     }
 
     function liquidateLoan(address _collateral, address _liquidate_asset, address _userToLiquidate, uint256 _amount, bool _receiveaToken) private {
-        require(IERC20(_liquidate_asset).approve(address(LENDING_POOL), _amount), "Approval error");
+        require(IERC20(_liquidate_asset).approve(address(LENDING_POOL), _amount), "Liquidate loan approval error");
         LENDING_POOL.liquidationCall(_collateral,_liquidate_asset, _userToLiquidate, _amount, _receiveaToken);
     }
-
 
     // assumes the balance of the token is on the contract
     function swapCollateral(address asset_from, address asset_to, uint amountOutMin) private {
@@ -89,7 +88,7 @@ contract LiquidateLoan is FlashLoanReceiverBase, Ownable {
         amountToTrade = asset_fromToken.balanceOf(address(this));
 
         // grant ubeswap access to your token
-        asset_fromToken.approve(address(ubeswapV2Router), amountToTrade);
+        require(asset_fromToken.approve(address(ubeswapV2Router), amountToTrade), "Ubeswap approval error");
 
         // use direct swap path for simplicity
         address[] memory swapPath = new address[](2);
@@ -98,13 +97,11 @@ contract LiquidateLoan is FlashLoanReceiverBase, Ownable {
         
         // Trade 1: Execute swap from asset_from into designated ERC20 token on ubeswap
         try ubeswapV2Router.swapExactTokensForTokens(
-            amountToTrade,
-            amountOutMin,
-            swapPath,
-            address(this),
-            deadline
-        ){
-        }
+                amountToTrade,
+                amountOutMin,
+                swapPath,
+                address(this),
+                deadline) { }
         catch Error(string memory reason)
         {
             // for debugging, swallow the error
@@ -114,7 +111,6 @@ contract LiquidateLoan is FlashLoanReceiverBase, Ownable {
         {
 
         }
-
     }
 
     /*

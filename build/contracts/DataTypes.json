@@ -1,9 +1,9 @@
 {
   "contractName": "DataTypes",
   "abi": [],
-  "metadata": "{\"compiler\":{\"version\":\"0.6.12+commit.27d51765\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/Libraries.sol\":\"DataTypes\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":1000},\"remappings\":[]},\"sources\":{\"project:/contracts/Interfaces.sol\":{\"keccak256\":\"0xbf7458dcaeaafd3224731e50f6457e299056562b4546c059665b717013431f6b\",\"license\":\"agpl-3.0\",\"urls\":[\"bzz-raw://6033ca96375fcad01512d5d3efb45d7c752093e6419ee423374465b2a5e9c521\",\"dweb:/ipfs/QmVGVWtYSrgp2MLe6EBT99wJHP6MhgbFyzvqzU84xnfz4R\"]},\"project:/contracts/Libraries.sol\":{\"keccak256\":\"0xc49146ebeddfd3ebb2e730a823481631b203c480656aee5cf2f6db63aa8f268e\",\"license\":\"agpl-3.0\",\"urls\":[\"bzz-raw://f350566c0d1725b0862dde28b3b63308b5fe534ee667744d9ed064468ae2e979\",\"dweb:/ipfs/QmbiXvusyDbdUBjftoFEor6Dqnf2RjuU4He76Yrw4vm341\"]}},\"version\":1}",
-  "bytecode": "0x60566023600b82828239805160001a607314601657fe5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220b2ff1adcd6aacab6f3b7253d27dd83418c6dba0bf57f972220b06ff38257189964736f6c634300060c0033",
-  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220b2ff1adcd6aacab6f3b7253d27dd83418c6dba0bf57f972220b06ff38257189964736f6c634300060c0033",
+  "metadata": "{\"compiler\":{\"version\":\"0.6.12+commit.27d51765\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/Libraries.sol\":\"DataTypes\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/Interfaces.sol\":{\"keccak256\":\"0xbf7458dcaeaafd3224731e50f6457e299056562b4546c059665b717013431f6b\",\"license\":\"agpl-3.0\",\"urls\":[\"bzz-raw://6033ca96375fcad01512d5d3efb45d7c752093e6419ee423374465b2a5e9c521\",\"dweb:/ipfs/QmVGVWtYSrgp2MLe6EBT99wJHP6MhgbFyzvqzU84xnfz4R\"]},\"project:/contracts/Libraries.sol\":{\"keccak256\":\"0xc49146ebeddfd3ebb2e730a823481631b203c480656aee5cf2f6db63aa8f268e\",\"license\":\"agpl-3.0\",\"urls\":[\"bzz-raw://f350566c0d1725b0862dde28b3b63308b5fe534ee667744d9ed064468ae2e979\",\"dweb:/ipfs/QmbiXvusyDbdUBjftoFEor6Dqnf2RjuU4He76Yrw4vm341\"]}},\"version\":1}",
+  "bytecode": "0x60566023600b82828239805160001a607314601657fe5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220c30a99ce51419e796a1f15122fdcfdfe2bfafd8bf7106cbb26eaf6689a40999f64736f6c634300060c0033",
+  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220c30a99ce51419e796a1f15122fdcfdfe2bfafd8bf7106cbb26eaf6689a40999f64736f6c634300060c0033",
   "immutableReferences": {},
   "sourceMap": "8710:1467:2:-:0;;;;;;;;;;;;;;;;;;;;;;;;;",
   "deployedSourceMap": "8710:1467:2:-:0;;;;;;;;",
@@ -12688,7 +12688,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.3",
-  "updatedAt": "2021-10-16T08:02:09.045Z",
+  "updatedAt": "2021-11-14T06:09:33.902Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},

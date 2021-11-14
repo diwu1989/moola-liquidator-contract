@@ -11286,11 +11286,11 @@
   },
   "compiler": {
     "name": "solc",
-    "version": "0.6.12+commit.27d51765.Linux.g++"
+    "version": "0.6.12+commit.27d51765.Emscripten.clang"
   },
   "networks": {},
-  "schemaVersion": "3.4.3",
-  "updatedAt": "2021-11-14T06:15:23.169Z",
+  "schemaVersion": "3.4.1",
+  "updatedAt": "2021-11-14T09:13:16.082Z",
   "devdoc": {
     "kind": "dev",
     "methods": {

@@ -1,0 +1,32 @@
+Ubeswap UniswapV2Router02
+0xe3d8bd6aed4f159bc8000a9cd47cffdb95f96121
+
+Ubeswap moola router
+0x7d28570135a2b1930f331c507f65039d4937f66c
+
+mcEUR -> cEUR path:
+mcEUR -> cEUR
+
+mcEUR -> cUSD path:
+mcEUR -> mcUSD -> cUSD
+
+mcEUR -> CELO path:
+mcEUR -> CELO
+
+mcUSD -> cUSD path:
+mcUSD -> cUSD
+
+mcUSD -> cEUR path:
+mcUSD -> mcEUR -> cEUR
+
+mcUSD -> CELO path:
+mcUSD -> CELO
+
+mCELO -> CELO path:
+mCELO -> CELO
+
+mCELO -> cUSD path:
+mCELO -> CELO -> mcUSD -> cUSD
+
+mCELO -> cEUR path:
+mCELO -> CELO -> mcEUR -> cEUR

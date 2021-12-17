@@ -46,7 +46,7 @@ contract LiquidateLoan is FlashLoanReceiverBase, Ownable {
         // collateral - the address of the token that we will be compensated in
         // userToLiquidate - id of the user to liquidate
         // swapPath - path for uniswap
-        (address collateral, address userToLiquidate, address[] memory swapPath) = abi.decode(params, (address, address, address[]));
+        (address collateral, address userToLiquidate, address[] memory swapPath, bool receiveAToken) = abi.decode(params, (address, address, address[], bool));
 
         // liquidate unhealthy loan
         uint256 loanAmount = amounts[0];
@@ -54,7 +54,7 @@ contract LiquidateLoan is FlashLoanReceiverBase, Ownable {
         uint256 flashloanFee = premiums[0];
         uint256 flashLoanRepayment = loanAmount.add(flashloanFee);
 
-        liquidateLoan(collateral, loanAsset, userToLiquidate, loanAmount);
+        liquidateLoan(collateral, loanAsset, userToLiquidate, loanAmount, receiveAToken);
 
         // swap collateral from collateral back to loan asset from flashloan to pay it off
         if (collateral != loanAsset) {
@@ -73,9 +73,9 @@ contract LiquidateLoan is FlashLoanReceiverBase, Ownable {
         return true;
     }
 
-    function liquidateLoan(address _collateral, address _reserve, address _user, uint256 _amount) private {
+    function liquidateLoan(address _collateral, address _reserve, address _user, uint256 _amount, bool _receiveAToken) private {
         require(IERC20(_reserve).approve(address(LENDING_POOL), _amount), "liquidate loan approval error");
-        LENDING_POOL.liquidationCall(_collateral, _reserve, _user, _amount, false);
+        LENDING_POOL.liquidationCall(_collateral, _reserve, _user, _amount, _receiveAToken);
     }
 
     // assumes the balance of the token is on the contract
@@ -112,8 +112,9 @@ contract LiquidateLoan is FlashLoanReceiverBase, Ownable {
     * _collateral - the token address of the collateral. This is the token that will be received after liquidating loans
     * _userToLiquidate - user ID of the loan that will be liquidated
     * _swapPath - the path that uniswap will use to swap tokens back to original tokens
+    * _receiveAToken - whether to receive AToken as part of liquidation (preferable to receive AToken)
     */
-    function executeFlashLoans(address _assetToLiquidate, uint256 _flashAmt, address _collateral, address _userToLiquidate, address[] memory _swapPath) public onlyOwner {
+    function executeFlashLoans(address _assetToLiquidate, uint256 _flashAmt, address _collateral, address _userToLiquidate, address[] memory _swapPath, bool _receiveAToken) public onlyOwner {
         address receiverAddress = address(this);
 
         // the various assets to be flashed
@@ -128,11 +129,8 @@ contract LiquidateLoan is FlashLoanReceiverBase, Ownable {
         uint256[] memory modes = new uint256[](1);
         modes[0] = 0;
 
-        // mode is set to 0, no debt will be accrued
-        address onBehalfOf = address(this);
-
         // passing these params to executeOperation so that they can be used to liquidate the loan and perform the swap
-        bytes memory params = abi.encode(_collateral, _userToLiquidate, _swapPath);
+        bytes memory params = abi.encode(_collateral, _userToLiquidate, _swapPath, _receiveAToken);
         uint16 referralCode = 0;
 
         LENDING_POOL.flashLoan(
@@ -140,7 +138,8 @@ contract LiquidateLoan is FlashLoanReceiverBase, Ownable {
             assets,
             amounts,
             modes,
-            onBehalfOf,
+            // mode is set to 0, no debt will be accrued
+            address(this),
             params,
             referralCode
         );

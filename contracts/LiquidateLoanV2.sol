@@ -22,16 +22,16 @@ contract LiquidateLoanV2 is FlashLoanReceiverBase, Ownable {
         swappa = ISwappaRouterV1(_swappa);
     }
 
-    /**
-    Given an asset to liquidate, and the collateral to collect on, and a swap path
-    compatible with the given swap router:
-    1. initiate a flash swap to receive flash amount of the asset to liquidate
-    2. inside flash swap, repay the lending pool, and receive the collateral as Atoken
-    3. unwrap Atoken to the first token in the swap path as needed
-    4. use the swap path to complete the flash swap
-    5. transfer the remainder to the owner
-     */
-    function liquidate(
+    /*
+    * This function is manually called to commence the flash loans sequence
+    * to make executing a liquidation  flexible calculations are done outside of the contract and sent via parameters here
+    * _assetToLiquidate - the token address of the asset that will be liquidated
+    * _flashAmt - flash loan amount (number of tokens) which is exactly the amount that will be liquidated
+    * _collateral - the token address of the collateral. This is the token that will be received after liquidating loans
+    * _userToLiquidate - user ID of the loan that will be liquidated
+    * _swappaPath / _swappaPairs / _swappaExtras - the path that swappa will use to swap tokens back to original tokens
+    */
+    function flashLiquidateWithSwappa(
         address _assetToLiquidate,
         uint256 _flashAmt,
         address _collateral,
@@ -80,6 +80,7 @@ contract LiquidateLoanV2 is FlashLoanReceiverBase, Ownable {
         );
     }
 
+    // LendingPool calls into this in the middle of flashloan
     function executeOperation(
         address[] calldata assets,
         uint256[] calldata amounts,
@@ -108,7 +109,7 @@ contract LiquidateLoanV2 is FlashLoanReceiverBase, Ownable {
         {
             // only receive Atoken if we have been provided a swap path from the Atoken to the debt
             // if no swap path is received, then it means collateral == debt, and we don't want Atoken
-            bool receiveAToken = swappaPath.length != 0 && swappaPath[0] != collateral;
+            bool receiveAToken = swappaPath.length > 0 && swappaPath[0] != collateral;
             liquidateLoan(collateral, loanAsset, userToLiquidate, loanAmount, receiveAToken);
         }
 
@@ -116,6 +117,10 @@ contract LiquidateLoanV2 is FlashLoanReceiverBase, Ownable {
         if (swappaPath.length > 0) {
             // require at least the flash loan repayment amount out as a safety
             swapCollateral(flashLoanRepayment, params);
+        } else {
+            // the only type of liquidation where we do not need to involve swappa is:
+            // - collateral == loan asset
+            // - receiveAToken == false
         }
 
         // Pay to owner the profits

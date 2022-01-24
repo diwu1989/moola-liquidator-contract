@@ -92,19 +92,19 @@ contract LiquidateLoanV2 is FlashLoanReceiverBase, Ownable {
         override
         returns (bool)
     {
+        // liquidate unhealthy loan
+        uint256 loanAmount = amounts[0];
+        address loanAsset = assets[0];
+        uint256 flashLoanRepayment = loanAmount.add(premiums[0]);
+
         (
             address collateral,
             address userToLiquidate,
             address[] memory swappaPath,
             , // address[] swappaPairs
-            // bytes[] swappaExtras
+                // bytes[] swappaExtras
         ) = abi.decode(params, (address, address, address[], address[], bytes[]));
 
-        // liquidate unhealthy loan
-        uint256 loanAmount = amounts[0];
-        address loanAsset = assets[0];
-        uint256 flashloanFee = premiums[0];
-        uint256 flashLoanRepayment = loanAmount.add(flashloanFee);
 
         {
             // only receive Atoken if we have been provided a swap path from the Atoken to the debt
@@ -124,8 +124,10 @@ contract LiquidateLoanV2 is FlashLoanReceiverBase, Ownable {
         }
 
         // Pay to owner the profits
-        uint256 profit = IERC20(loanAsset).balanceOf(address(this)).sub(flashLoanRepayment);
-        IERC20(loanAsset).safeTransfer(owner(), profit);
+        {
+            uint256 profit = IERC20(loanAsset).balanceOf(address(this)).sub(flashLoanRepayment);
+            IERC20(loanAsset).safeTransfer(owner(), profit);
+        }
 
         // Approve the LendingPool contract to *pull* the owed amount + premiums
         IERC20(loanAsset).safeApprove(address(LENDING_POOL), flashLoanRepayment);

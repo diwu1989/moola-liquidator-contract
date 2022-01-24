@@ -157,6 +157,7 @@ contract LiquidateLoanV2 is FlashLoanReceiverBase, Ownable {
         // grant swap access to your token, swap ALL of the collateral over to the debt asset
         collateralOrAToken.safeApprove(address(swappa), amountToTrade);
 
+        // use swapExactInputForOutputWithPrecheck to precheck the output amount before transfer
         swappa.swapExactInputForOutputWithPrecheck(
             swappaPath,
             swappaPairs,

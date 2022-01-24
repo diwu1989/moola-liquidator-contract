@@ -152,6 +152,7 @@ contract LiquidateLoanV2 is FlashLoanReceiverBase, Ownable {
         // read the balance from the first token in the swap path, which may be AToken
         IERC20 collateralOrAToken = IERC20(swappaPath[0]);
         uint256 amountToTrade = collateralOrAToken.balanceOf(address(this));
+        require(amountToTrade > 0, "swap collateral amount is missing");
 
         // grant swap access to your token, swap ALL of the collateral over to the debt asset
         collateralOrAToken.safeApprove(address(swappa), amountToTrade);

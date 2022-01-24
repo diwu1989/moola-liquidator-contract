@@ -163,7 +163,7 @@ contract LiquidateLoanV2 is FlashLoanReceiverBase, Ownable {
             amountToTrade,
             amountOutMin,
             address(this),
-            block.timestamp + 10
+            block.timestamp + 1
         );
     }
 }

@@ -40,6 +40,12 @@ contract LiquidateLoanV2 is FlashLoanReceiverBase, Ownable {
         address[] calldata _swappaPairs,
         bytes[] calldata _swappaExtras
     ) external onlyOwner {
+        // sanity check the swappa path
+        require(
+            _swappaPath.length == 0 ||
+            _swappaPath[_swappaPath.length - 1] == _assetToLiquidate,
+            "Swappa path does not match the asset to liquidate");
+
         address receiverAddress = address(this);
 
         // the various assets to be flashed
@@ -62,9 +68,6 @@ contract LiquidateLoanV2 is FlashLoanReceiverBase, Ownable {
             _swappaPairs,
             _swappaExtras);
 
-        // my referral code
-        uint16 referralCode = 1989;
-
         LENDING_POOL.flashLoan(
             receiverAddress,
             assets,
@@ -73,7 +76,7 @@ contract LiquidateLoanV2 is FlashLoanReceiverBase, Ownable {
             // mode is set to 0, no debt will be accrued
             address(this),
             params,
-            referralCode
+            1989 // my referral code
         );
     }
 
@@ -88,6 +91,68 @@ contract LiquidateLoanV2 is FlashLoanReceiverBase, Ownable {
         override
         returns (bool)
     {
+        (
+            address collateral,
+            address userToLiquidate,
+            address[] memory swappaPath,
+            , // address[] swappaPairs
+            // bytes[] swappaExtras
+        ) = abi.decode(params, (address, address, address[], address[], bytes[]));
+
+        // liquidate unhealthy loan
+        uint256 loanAmount = amounts[0];
+        address loanAsset = assets[0];
+        uint256 flashloanFee = premiums[0];
+        uint256 flashLoanRepayment = loanAmount.add(flashloanFee);
+
+        {
+            bool receiveAToken = swappaPath.length != 0 && swappaPath[0] != collateral;
+            liquidateLoan(collateral, loanAsset, userToLiquidate, loanAmount, receiveAToken);
+        }
+
+        // swap collateral from collateral back to loan asset from flashloan to pay it off
+        if (collateral != loanAsset) {
+            // require at least the flash loan repayment amount out as a safety
+            swapCollateral(flashLoanRepayment, params);
+        }
+
+        // Pay to owner the profits
+        uint256 profit = IERC20(loanAsset).balanceOf(address(this)).sub(flashLoanRepayment);
+        require(IERC20(loanAsset).transfer(owner(), profit), "profit transfer error");
+
+        // Approve the LendingPool contract to *pull* the owed amount + premiums
+        require(IERC20(loanAsset).approve(address(LENDING_POOL), flashLoanRepayment), "flash loan repayment error");
         return true;
+    }
+
+    function liquidateLoan(address _collateral, address _reserve, address _user, uint256 _amount, bool _receiveAToken) private {
+        require(IERC20(_reserve).approve(address(LENDING_POOL), _amount), "liquidate loan approval error");
+        LENDING_POOL.liquidationCall(_collateral, _reserve, _user, _amount, _receiveAToken);
+    }
+
+    // assumes the balance of the token is on the contract
+    function swapCollateral(uint amountOutMin, bytes memory params) private {
+        (
+            , // address collateral
+            , // address userToLiquidate
+            address[] memory swappaPath,
+            address[] memory swappaPairs,
+            bytes[] memory swappaExtras
+        ) = abi.decode(params, (address, address, address[], address[], bytes[]));
+        IERC20 collateralToken = IERC20(swappaPath[0]);
+        uint256 amountToTrade = collateralToken.balanceOf(address(this));
+
+        // grant swap access to your token, swap ALL of the collateral over to the debt asset
+        require(collateralToken.approve(address(swappa), amountToTrade), "swap approval error");
+
+        swappa.swapExactInputForOutputWithPrecheck(
+            swappaPath,
+            swappaPairs,
+            swappaExtras,
+            amountToTrade,
+            amountOutMin,
+            address(this),
+            block.timestamp + 10
+        );
     }
 }

@@ -16,8 +16,8 @@ contract LiquidateLoanV2 is FlashLoanReceiverBase, Ownable {
     ISwappaRouterV1 public immutable swappa;
 
     constructor(
-        ILendingPoolAddressesProvider _addressProvider,
-        ISwappaRouterV1 _swappa
+        ILendingPoolAddressesProvider _addressProvider, // 0xD1088091A174d33412a968Fa34Cb67131188B332
+        ISwappaRouterV1 _swappa // 0xF35ed7156BABF2541E032B3bB8625210316e2832
     ) FlashLoanReceiverBase(_addressProvider) public {
         swappa = ISwappaRouterV1(_swappa);
     }

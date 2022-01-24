@@ -106,28 +106,31 @@ contract LiquidateLoanV2 is FlashLoanReceiverBase, Ownable {
         uint256 flashLoanRepayment = loanAmount.add(flashloanFee);
 
         {
+            // only receive Atoken if we have been provided a swap path from the Atoken to the debt
+            // if no swap path is received, then it means collateral == debt, and we don't want Atoken
             bool receiveAToken = swappaPath.length != 0 && swappaPath[0] != collateral;
             liquidateLoan(collateral, loanAsset, userToLiquidate, loanAmount, receiveAToken);
         }
 
-        // swap collateral from collateral back to loan asset from flashloan to pay it off
-        if (collateral != loanAsset) {
+        // swap collateral to loan asset from flashloan to pay it off, we may have received Atoken
+        if (swappaPath.length > 0) {
             // require at least the flash loan repayment amount out as a safety
             swapCollateral(flashLoanRepayment, params);
         }
 
         // Pay to owner the profits
         uint256 profit = IERC20(loanAsset).balanceOf(address(this)).sub(flashLoanRepayment);
-        require(IERC20(loanAsset).transfer(owner(), profit), "profit transfer error");
+        IERC20(loanAsset).safeTransfer(owner(), profit);
 
         // Approve the LendingPool contract to *pull* the owed amount + premiums
-        require(IERC20(loanAsset).approve(address(LENDING_POOL), flashLoanRepayment), "flash loan repayment error");
+        IERC20(loanAsset).safeApprove(address(LENDING_POOL), flashLoanRepayment);
         return true;
     }
 
-    function liquidateLoan(address _collateral, address _reserve, address _user, uint256 _amount, bool _receiveAToken) private {
-        require(IERC20(_reserve).approve(address(LENDING_POOL), _amount), "liquidate loan approval error");
-        LENDING_POOL.liquidationCall(_collateral, _reserve, _user, _amount, _receiveAToken);
+    function liquidateLoan(address _collateral, address _loanAsset, address _user, uint256 _amount, bool _receiveAToken) private {
+        // approve the flash loaned loan asset to the lending pool for repayment
+        IERC20(_loanAsset).safeApprove(address(LENDING_POOL), _amount);
+        LENDING_POOL.liquidationCall(_collateral, _loanAsset, _user, _amount, _receiveAToken);
     }
 
     // assumes the balance of the token is on the contract
@@ -139,11 +142,12 @@ contract LiquidateLoanV2 is FlashLoanReceiverBase, Ownable {
             address[] memory swappaPairs,
             bytes[] memory swappaExtras
         ) = abi.decode(params, (address, address, address[], address[], bytes[]));
-        IERC20 collateralToken = IERC20(swappaPath[0]);
-        uint256 amountToTrade = collateralToken.balanceOf(address(this));
+        // read the balance from the first token in the swap path, which may be AToken
+        IERC20 collateralOrAToken = IERC20(swappaPath[0]);
+        uint256 amountToTrade = collateralOrAToken.balanceOf(address(this));
 
         // grant swap access to your token, swap ALL of the collateral over to the debt asset
-        require(collateralToken.approve(address(swappa), amountToTrade), "swap approval error");
+        collateralOrAToken.safeApprove(address(swappa), amountToTrade);
 
         swappa.swapExactInputForOutputWithPrecheck(
             swappaPath,

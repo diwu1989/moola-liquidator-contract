@@ -1,0 +1,27 @@
+{
+  "name": "moola-liquidator-contract",
+  "version": "1.0.0",
+  "description": "Based on work from https://github.com/dkirsche/aave-liquidator adapted to Moola and Ubeswap",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "@terminal-fi/swappa": "^1.8.0",
+    "@ubeswap/default-token-list": "^4.1.42"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/diwu1989/moola-liquidator-contract.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/diwu1989/moola-liquidator-contract/issues"
+  },
+  "homepage": "https://github.com/diwu1989/moola-liquidator-contract#readme"
+}

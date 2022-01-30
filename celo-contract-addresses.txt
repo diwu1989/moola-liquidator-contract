@@ -1,33 +1,34 @@
 Mainnet
 
-Contract             Proxy                Implementation                             Version CELO      cUSD      cEUR      cREAL
-Accounts             0x7d21685C17607338b… 0xccF3e2a7c06A515E36F547c6eB563dc8E00d3c08 1.1.2.0 1.000e+18 0         0         0
-Attestations         0xdC553892cdeeeD9f5… 0x936d74304a17440488e02197285a2EA5f6Dd40A8 1.1.1.1 0         5.606e+22 0         0
-BlockchainParameters 0x6E10a8864C65434A7… 0xDEfbc89482cd36B98d1b506Cc56Dd2AF74217955 1.2.0.0 0         0         0         0
-DoubleSigningSlasher 0x50C100baCDe7E2b54… 0x4Bb82B5862Beb483Fdb762EC4A6cB60953568A12 1.1.1.0 0         0         0         0
-DowntimeSlasher      0x71CAc3B31c138F332… 0x9ebB6A46149a43C9D1B12EfdC068b969eCA7246F 2.0.0.0 0         0         0         0
-Election             0x8D667719214429287… 0x31EFa3ea696F91E751ec5fA6c93B876E7270D77B 1.1.2.0 0         0         0         0
-EpochRewards         0x07F007d389883622E… 0x563BA8Ed56bd32a964831aB6AfF1E53238177eDA 1.1.1.0 0         0         0         0
-Escrow               0xf4Fa51472Ca8d72AF… 0x7A097d13F2B9f4E32effFBf2a5EA756dAb4420C1 1.1.1.1 2.838e+19 4.088e+22 2.080e+20 0
-Exchange             0x67316300f17f06308… 0xEDF3F7e01037e4583de2659C5e243621Ea2501A4 1.1.1.0 0         0         0         0
-ExchangeBRL          0x8f2cf9855C919AFAC… 0x21772Fc92AB1B15dfE4ed7559EaD98eDba883feE 1.1.0.0 0         0         0         0
-ExchangeEUR          0xE383394B913d7302c… 0x622833AB6E9501C9072d2c706c60AaB5Ff0234d9 1.1.0.0 0         0         0         0
-FeeCurrencyWhitelist 0xBB024E9cdCB2f9E34… 0xc301efebAe9c517eA81f87d2CF2Ff0A87caaBc83 NONE    0         0         0         0
-Freezer              0x47a472F45057A9d79… 0xa79cDb272799175A118A4Ce49ceCBF3eC86649e6 NONE    0         0         0         0
-GasPriceMinimum      0xDfca3a8d7699D8bAf… 0x7C4194dF1Dbdb5ca737B7d457bB00176f8A52361 1.1.1.0 0         0         0         0
-GoldToken            0x471EcE3750Da237f9… 0x4DdeB8F7041aB3260c6ec5Afb6FEab0650F4ABB4 1.1.1.1 3.167e+20 1.937e+19 0         0
-Governance           0xD533Ca259b330c7A8… 0x074a4810015d67bAFac5fE522c70761f343db55E 1.2.1.0 9.258e+24 1.581e+20 2.000e+24 1.337e+16
-GrandaMento          0x03f6842B82DD2C927… 0x5B2C9E7932B08D8F2Ce70ef9E5c98528256f9aB4 1.1.0.0 0         0         0         0
-LockedGold           0x6cC083Aed9e3ebe30… 0xc683d91656ED9024ADDD7a40A181398E0258283F 1.1.1.1 3.127e+26 0         0         0
-Random               0x22a4aAF42A50bFA72… 0xE43ea9C641a2af9959CaEEe54aDB089F65457028 1.1.1.0 0         0         0         0
-Registry             0x00000000000000000… 0x203fdf86A00999107Df531fa00b4bA81d674cb66 NONE    0         0         0         0
-Reserve              0x9380fA34Fd9e4Fd14… 0xc683e6f77B58D814B31F8661331EbDf63785D607 1.1.2.1 1.058e+26 5.000e+18 0         0
-SortedOracles        0xefB84935239dAcdec… 0x6CEB70e9237dfE15eDC4A35aAd1598225609d171 1.1.2.0 0         0         0         0
-StableToken          0x765DE816845861e75… 0x18E6BFDc909063F7445E410a5495264619495bCB 1.2.0.1 4.070e+18 1.055e+22 0         0
-StableTokenBRL       0xe8537a3d056DA4466… 0x5e72978225b5777298B28B7EA543bf0C5FEDDEc8 1.1.0.0 0         0         0         0
-StableTokenEUR       0xD8763CBa276a3738E… 0x09933e89986FeA776C3Be3556dBF9BA23c240bB3 1.1.0.1 5.000e+15 4.000e+18 4.068e+23 0
-TransferWhitelist    0xb49E4d6F0B7f8d044… NONE                                       NONE    0         0         0         0
-Validators           0xaEb865bCa93DdC8F4… 0x2e3b47Cf3163dE47E852ff11D53a9ad8dFE7C68D 1.2.0.1 0         0         0         0
+Contract             Proxy                                      Implementation                             Version CELO      cUSD      cEUR      cREAL
+Accounts             0x7d21685C17607338b313a7174bAb6620baD0aaB7 0xccF3e2a7c06A515E36F547c6eB563dc8E00d3c08 1.1.2.0 1.000e+18 0         0         0
+Attestations         0xdC553892cdeeeD9f575aa0FBA099e5847fd88D20 0x936d74304a17440488e02197285a2EA5f6Dd40A8 1.1.1.1 0         5.606e+22 0         0
+BlockchainParameters 0x6E10a8864C65434A721d82e424d727326F9d5Bfa 0xDEfbc89482cd36B98d1b506Cc56Dd2AF74217955 1.2.0.0 0         0         0         0
+DoubleSigningSlasher 0x50C100baCDe7E2b546371EB0Be1eACcf0A6772ec 0x4Bb82B5862Beb483Fdb762EC4A6cB60953568A12 1.1.1.0 0         0         0         0
+DowntimeSlasher      0x71CAc3B31c138F3327C6cA14f9a1c8d752463fDd 0x9ebB6A46149a43C9D1B12EfdC068b969eCA7246F 2.0.0.0 0         0         0         0
+Election             0x8D6677192144292870907E3Fa8A5527fE55A7ff6 0x31EFa3ea696F91E751ec5fA6c93B876E7270D77B 1.1.2.0 0         0         0         0
+EpochRewards         0x07F007d389883622Ef8D4d347b3f78007f28d8b7 0x563BA8Ed56bd32a964831aB6AfF1E53238177eDA 1.1.1.0 0         0         0         0
+Escrow               0xf4Fa51472Ca8d72AF678975D9F8795A504E7ada5 0x7A097d13F2B9f4E32effFBf2a5EA756dAb4420C1 1.1.1.1 2.838e+19 4.088e+22 2.080e+20 0
+Exchange             0x67316300f17f063085Ca8bCa4bd3f7a5a3C66275 0xEDF3F7e01037e4583de2659C5e243621Ea2501A4 1.1.1.0 0         0         0         0
+ExchangeBRL          0x8f2cf9855C919AFAC8Bd2E7acEc0205ed568a4EA 0x21772Fc92AB1B15dfE4ed7559EaD98eDba883feE 1.1.0.0 0         0         0         0
+ExchangeEUR          0xE383394B913d7302c49F794C7d3243c429d53D1d 0x622833AB6E9501C9072d2c706c60AaB5Ff0234d9 1.1.0.0 0         0         0         0
+FeeCurrencyWhitelist 0xBB024E9cdCB2f9E34d893630D19611B8A5381b3c 0xc301efebAe9c517eA81f87d2CF2Ff0A87caaBc83 NONE    0         0         0         0
+Freezer              0x47a472F45057A9d79d62C6427367016409f4fF5A 0xa79cDb272799175A118A4Ce49ceCBF3eC86649e6 NONE    0         0         0         0
+GasPriceMinimum      0xDfca3a8d7699D8bAfe656823AD60C17cb8270ECC 0x7C4194dF1Dbdb5ca737B7d457bB00176f8A52361 1.1.1.0 0         0         0         0
+GoldToken            0x471EcE3750Da237f93B8E339c536989b8978a438 0x4DdeB8F7041aB3260c6ec5Afb6FEab0650F4ABB4 1.1.1.1 3.167e+20 1.937e+19 0         0
+Governance           0xD533Ca259b330c7A88f74E000a3FaEa2d63B7972 0x074a4810015d67bAFac5fE522c70761f343db55E 1.2.1.0 9.258e+24 1.581e+20 2.000e+24 1.337e+16
+GrandaMento          0x03f6842B82DD2C9276931A17dd23D73C16454a49 0x5B2C9E7932B08D8F2Ce70ef9E5c98528256f9aB4 1.1.0.0 0         0         0         0
+LockedGold           0x6cC083Aed9e3ebe302A6336dBC7c921C9f03349E 0xc683d91656ED9024ADDD7a40A181398E0258283F 1.1.1.1 3.127e+26 0         0         0
+Random               0x22a4aAF42A50bFA7238182460E32f15859c93dfe 0xE43ea9C641a2af9959CaEEe54aDB089F65457028 1.1.1.0 0         0         0         0
+Registry             0x000000000000000000000000000000000000ce10 0x203fdf86A00999107Df531fa00b4bA81d674cb66 NONE    0         0         0         0
+Reserve              0x9380fA34Fd9e4Fd14c06305fd7B6199089eD4eb9 0xc683e6f77B58D814B31F8661331EbDf63785D607 1.1.2.1 1.058e+26 5.000e+18 0         0
+SortedOracles        0xefB84935239dAcdecF7c5bA76d8dE40b077B7b33 0x6CEB70e9237dfE15eDC4A35aAd1598225609d171 1.1.2.0 0         0         0         0
+StableToken          0x765DE816845861e75A25fCA122bb6898B8B1282a 0x18E6BFDc909063F7445E410a5495264619495bCB 1.2.0.1 4.070e+18 1.055e+22 0         0
+StableTokenBRL       0xe8537a3d056DA446677B9E9d6c5dB704EaAb4787 0x5e72978225b5777298B28B7EA543bf0C5FEDDEc8 1.1.0.0 0         0         0         0
+StableTokenEUR       0xD8763CBa276a3738E6DE85b4b3bF5FDed6D6cA73 0x09933e89986FeA776C3Be3556dBF9BA23c240bB3 1.1.0.1 5.000e+15 4.000e+18 4.068e+23 0
+TransferWhitelist    0xb49E4d6F0B7f8d0440F75697E6c8b37E09178BCF NONE                                       NONE    0         0         0         0
+Validators           0xaEb865bCa93DdC8F47b8e29F40C5399cE34d0C58 0x2e3b47Cf3163dE47E852ff11D53a9ad8dFE7C68D 1.2.0.1 0         0         0         0
+
 
 Alfajores
 

@@ -105,7 +105,6 @@ contract LiquidateLoanV2 is FlashLoanReceiverBase, Ownable {
                 // bytes[] swappaExtras
         ) = abi.decode(params, (address, address, address[], address[], bytes[]));
 
-
         {
             // only receive Atoken if we have been provided a swap path from the Atoken to the debt
             // if no swap path is received, then it means collateral == debt, and we don't want Atoken

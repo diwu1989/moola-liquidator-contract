@@ -102,7 +102,7 @@ contract LiquidateLoanV2 is FlashLoanReceiverBase, Ownable {
             address userToLiquidate,
             address[] memory swappaPath,
             , // address[] swappaPairs
-                // bytes[] swappaExtras
+              // bytes[] swappaExtras
         ) = abi.decode(params, (address, address, address[], address[], bytes[]));
 
         {

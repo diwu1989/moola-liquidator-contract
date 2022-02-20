@@ -11,7 +11,7 @@ import { FlashLoanReceiverBase } from "./FlashLoanReceiverBase.sol";
 contract LiquidateLoanV2 is FlashLoanReceiverBase, Ownable {
 
     using SafeERC20 for IERC20;
-    using SafeMath for uint256;
+    using SafeMath for uint;
 
     ISwappaRouterV1 public immutable swappa;
 
@@ -24,16 +24,16 @@ contract LiquidateLoanV2 is FlashLoanReceiverBase, Ownable {
 
     /*
     * This function is manually called to commence the flash loans sequence
-    * to make executing a liquidation  flexible calculations are done outside of the contract and sent via parameters here
+    * to make executing a liquidation flexible calculations are done outside of the contract and sent via parameters here
     * _assetToLiquidate - the token address of the asset that will be liquidated
     * _flashAmt - flash loan amount (number of tokens) which is exactly the amount that will be liquidated
     * _collateral - the token address of the collateral. This is the token that will be received after liquidating loans
     * _userToLiquidate - user ID of the loan that will be liquidated
-    * _swappaPath / _swappaPairs / _swappaExtras - the path that swappa will use to swap tokens back to original tokens
+    * _swappaPath / _swappaPairs / _swappaExtras - the path that swappa will use to swap collateral token/aToken back to asset token
     */
     function flashLiquidateWithSwappa(
         address _assetToLiquidate,
-        uint256 _flashAmt,
+        uint _flashAmt,
         address _collateral,
         address _userToLiquidate,
         address[] calldata _swappaPath,
@@ -53,11 +53,11 @@ contract LiquidateLoanV2 is FlashLoanReceiverBase, Ownable {
         assets[0] = _assetToLiquidate;
 
         // the amount to be flashed for each asset
-        uint256[] memory amounts = new uint256[](1);
+        uint[] memory amounts = new uint[](1);
         amounts[0] = _flashAmt;
 
         // 0 = no debt, 1 = stable, 2 = variable
-        uint256[] memory modes = new uint256[](1);
+        uint[] memory modes = new uint[](1);
         modes[0] = 0;
 
         // passing these params to executeOperation so that they can be used to liquidate the loan and perform the swap
@@ -83,8 +83,8 @@ contract LiquidateLoanV2 is FlashLoanReceiverBase, Ownable {
     // LendingPool calls into this in the middle of flashloan
     function executeOperation(
         address[] calldata assets,
-        uint256[] calldata amounts,
-        uint256[] calldata premiums,
+        uint[] calldata amounts,
+        uint[] calldata premiums,
         address /* initiator */,
         bytes calldata params
     )
@@ -93,9 +93,9 @@ contract LiquidateLoanV2 is FlashLoanReceiverBase, Ownable {
         returns (bool)
     {
         // liquidate unhealthy loan
-        uint256 loanAmount = amounts[0];
+        uint loanAmount = amounts[0];
         address loanAsset = assets[0];
-        uint256 flashLoanRepayment = loanAmount.add(premiums[0]);
+        uint flashLoanRepayment = loanAmount.add(premiums[0]);
 
         (
             address collateral,
@@ -120,12 +120,15 @@ contract LiquidateLoanV2 is FlashLoanReceiverBase, Ownable {
             // the only type of liquidation where we do not need to involve swappa is:
             // - collateral == loan asset
             // - receiveAToken == false
+            // example is if someone deposited cUSD and borrowed cUSD
+            require(collateral == loanAsset, "no swap path defined, collateral must be equal to loan asset");
         }
 
         // Pay to owner the profits
         {
-            uint256 profit = IERC20(loanAsset).balanceOf(address(this)).sub(flashLoanRepayment);
-            IERC20(loanAsset).safeTransfer(owner(), profit);
+            uint balance = IERC20(loanAsset).balanceOf(address(this));
+            require(balance >= flashLoanRepayment, "insufficient flash loan repayment amount after swap");
+            IERC20(loanAsset).safeTransfer(owner(), balance.sub(flashLoanRepayment));
         }
 
         // Approve the LendingPool contract to *pull* the owed amount + premiums
@@ -133,7 +136,7 @@ contract LiquidateLoanV2 is FlashLoanReceiverBase, Ownable {
         return true;
     }
 
-    function liquidateLoan(address _collateral, address _loanAsset, address _user, uint256 _amount, bool _receiveAToken) private {
+    function liquidateLoan(address _collateral, address _loanAsset, address _user, uint _amount, bool _receiveAToken) private {
         // approve the flash loaned loan asset to the lending pool for repayment
         IERC20(_loanAsset).safeApprove(address(LENDING_POOL), _amount);
         LENDING_POOL.liquidationCall(_collateral, _loanAsset, _user, _amount, _receiveAToken);
@@ -150,18 +153,18 @@ contract LiquidateLoanV2 is FlashLoanReceiverBase, Ownable {
         ) = abi.decode(params, (address, address, address[], address[], bytes[]));
         // read the balance from the first token in the swap path, which may be AToken
         IERC20 collateralOrAToken = IERC20(swappaPath[0]);
-        uint256 amountToTrade = collateralOrAToken.balanceOf(address(this));
-        require(amountToTrade > 0, "swap collateral amount is missing");
+        uint amountIn = collateralOrAToken.balanceOf(address(this));
+        require(amountIn > 0, "swap collateral amount is missing");
 
         // grant swap access to your token, swap ALL of the collateral over to the debt asset
-        collateralOrAToken.safeApprove(address(swappa), amountToTrade);
+        collateralOrAToken.safeApprove(address(swappa), amountIn);
 
         // use swapExactInputForOutputWithPrecheck to precheck the output amount before transfer
         swappa.swapExactInputForOutputWithPrecheck(
             swappaPath,
             swappaPairs,
             swappaExtras,
-            amountToTrade,
+            amountIn,
             amountOutMin,
             address(this),
             block.timestamp + 1

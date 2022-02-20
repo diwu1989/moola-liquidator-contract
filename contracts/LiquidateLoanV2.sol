@@ -39,7 +39,7 @@ contract LiquidateLoanV2 is FlashLoanReceiverBase, Ownable {
         address[] calldata _swappaPath,
         address[] calldata _swappaPairs,
         bytes[] calldata _swappaExtras
-    ) external onlyOwner {
+    ) external {
         // sanity check the swappa path
         require(
             _swappaPath.length == 0 ||
